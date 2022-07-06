@@ -1,0 +1,129 @@
+Moderatore(Email, Username, Nome, Cognome, Password)
+    PK: Email
+    AK: Username
+
+Utente(Email, Username, Nome, Cognome, Password, Foto)
+    PK: Email
+    AK: Username
+
+UtentePremium(CodUtente, IBAN)
+    PK: CodUtente
+    FK: CodUtente REFERENCES Utente
+
+Amicizia(Seguito, Seguente)
+    PK: Seguito, Seguente
+    FK: Seguito REFERENCES Utente
+    FK: Seguente REFERENCES Utente
+
+PubblicazioniOrarie(CodUtente, Data, Ora)
+    PK: CodUtente, Data, Ora
+    FK: CodUtente REFERENCES Utente
+
+
+T1) ella seguente traduzione logica, non viene controllato
+che in una data ora, un utente puo pubblicare al massimo
+1000 recensioni. Questo vincolo verra gestito successivamente con i trigger
+
+Recensione(CodR, Foto, DAbilitaVisionePubblica, Titolo, Valore, 
+           DataPubblicazione, OraPubblicazione, CodUtente)
+    PK: CodR 
+    FK: (DataPubblicazione, OraPubblicazione, CodUtente) REFERENCES Utente
+
+Oggetto(CodR, Nome, Descrizione, Categoria)
+    PK: CodR
+    FK: CodR REFERENCES Recensione
+
+Medaglia(CodUtente, CodR)
+    PK: CodUtente, CodR
+    FK: CodUtente REFERENCES Utente
+    FK: CodR REFERENCES Recensione
+
+Report(CodUtente, CodR)]
+    PK: CodUtente, CodR
+    FK: CodUtente REFERENCES Utente
+    FK: CodR REFERENCES Recensione
+
+
+T2) Nella seguente traduzione logica, non viene controllato
+che in una data ora, un utente puo pubblicare al massimo
+1000 commenti.
+Questo vincolo verra gestito successivamente con i trigger
+
+Commento(CodC, CodR, CodUtente, Data, Ora, Minuto, Testo, CodCRisposta, CodRRisposta)
+    PK: CodC, CodR
+    FK: CodR REFERENCES Recensione
+    FK: (CodUtente, Data, Ora) REFERENCES PubblicazioniOrarie
+    FK: (CodCRisposta, CodRRisposta) REFERENCES Commento
+
+
+Messaggio(CodM, CodMittente, CodDestinatario, Letto, Timestamp)
+    PK: CodM, CodMittente, CodDestinatario
+    FK: CodMittente REFERENCES Utente
+    FK: CodDestinatario REFERENCES Utente
+
+
+T3) Nella seguente traduzione logica, non viene controllato che 
+per ciascun messaggio ci sia una sola tipologia ad esso associata.
+Da valutare se gestire tale vincolo nello schema logico o tramite trigger
+
+MTesto(CodM, CodMittente, CodDestinatario, Contenuto)
+    PK: CodM, CodMittente, CodDestinatario
+    FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
+
+MImmagine(CodM, CodMittente, CodDestinatario, Immagine, descrizione)
+    PK: CodM, CodMittente, CodDestinatario
+    FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
+
+MRecensione(CodM, CodMittente, CodDestinatario, CodR)
+    PK: CodM, CodMittente, CodDestinatario
+    FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
+    FK: CodR REFERENCES Recensione
+
+
+CartaCredito(Numero, DScadenza, EnteMittente, CodTitolare)
+    PK: Numero 
+    FK: CodTitolare REFERENCES Utente
+
+Piano(CodP, Quantita, Periodo, CodUtentePremium)
+    PK: CodP
+    FK: CodUtentePremium REFERENCES UtentePremium
+
+Esclusivita(DAnticipata, CodP, CodR)
+    PK: CodP, CodR
+    FK: CodP REFERENCES Piano
+    FK: CodR REFERENCES Recensione
+
+Iscrizione(CodP, CodUtente, DIscrizione, DAbbandono)
+    PK: (CodP, CodUtente, DIscrizione) 
+    FK: CodUtente REFERENCES Utente
+    FK: CodP REFERENCES Piano
+
+T4) Vincolo da gestire: Verificare che l'utente abbia fatto 
+le transazioni automatiche con una delle carte di credito 
+a lui associate
+
+TransazioneAutomatica(CRO, Annullata, Data, CodPiano, CodUtente,
+                      NumeroCartaDiCredito)
+    PK: CRO 
+    FK: CodPiano REFERENCES Piano
+    FK: CodUtente REFERENCES Utente
+    FK: NumeroCartaDiCredito REFERENCES CartaCredito
+    AK: Data, CodPiano, CodUtente
+
+TransazioneManuale(CRO, Data, CodMittente, CodDestinatario, 
+                   NumeroCartaDiCredito)
+    PK: CRO 
+    FK: CodMittente REFERENCES Utente
+    FK: CodDestinatario REFERENCES Utente
+    FK: NumeroCartaDiCredito REFERENCES CartaCredito
+    AK: Data, CodMittente, CodDestinatario
+
+Ban(CodUtente, CodModeratore)
+    PK: CodUtente, CodModeratore
+    FK: CodUtente REFERENCES Utente
+    FK: CodModeratore REFERENCES Moderatore
+
+Rimozione(DataEffettuazione, CodR, DAnnullamento, CodModeratore)
+    PK: DataEffettuazione, CodR
+    FK: CodR REFERENCES Recensione
+    FK: CodModeratore REFERENCES Moderatore
