@@ -117,7 +117,7 @@ TransazioneManuale(CRO, Data, CodMittente, CodDestinatario,
     FK: CodDestinatario REFERENCES Utente
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
     AK: Data, CodMittente, CodDestinatario
-// Ricordarsi di propagare la modifica anche al SQL
+
 Ban(CodUtente, CodModeratore)
     PK: CodUtente
     FK: CodUtente REFERENCES Utente
