@@ -209,11 +209,10 @@ CREATE TABLE TransazioneManuale(
 );
 
 CREATE TABLE Ban(
-	CodUtente varchar(320) NOT NULL,
+	CodUtente varchar(320) PRIMARY KEY,
 	CodModeratore varchar(320) NOT NULL,
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
-	FOREIGN KEY (CodModeratore) REFERENCES Utente(Username),
-	PRIMARY KEY(CodModeratore, CodUtente)
+	FOREIGN KEY (CodModeratore) REFERENCES Utente(Username)
 );
 
 create table Rimozione(
