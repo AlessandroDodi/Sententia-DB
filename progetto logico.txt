@@ -108,7 +108,7 @@ TransazioneAutomatica(CRO, Annullata, Data, CodPiano, CodUtente,
     FK: CodPiano REFERENCES Piano
     FK: CodUtente REFERENCES Utente
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
-    AK: Data, CodPiano, CodUtente
+    AK: (Data, CodPiano, CodUtente)
 
 TransazioneManuale(CRO, Annullata, Data, CodMittente, CodDestinatario, 
                    NumeroCartaDiCredito)
@@ -116,7 +116,7 @@ TransazioneManuale(CRO, Annullata, Data, CodMittente, CodDestinatario,
     FK: CodMittente REFERENCES Utente
     FK: CodDestinatario REFERENCES Utente
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
-    AK: Data, CodMittente, CodDestinatario
+    AK: (Data, CodMittente, CodDestinatario)
 
 Ban(CodUtente, CodModeratore)
     PK: CodUtente
