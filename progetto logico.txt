@@ -15,10 +15,6 @@ Amicizia(Seguito, Seguente)
     FK: Seguito REFERENCES Utente
     FK: Seguente REFERENCES Utente
 
-PubblicazioniOrarie(CodUtente, Data, Ora)
-    PK: CodUtente, Data, Ora
-    FK: CodUtente REFERENCES Utente
-
 
 T1) ella seguente traduzione logica, non viene controllato
 che in una data ora, un utente puo pubblicare al massimo
