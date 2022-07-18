@@ -1,10 +1,10 @@
 Moderatore(Email, Username, Nome, Cognome, Password)
-    PK: Email
-    AK: Username
+    PK: Username
+    AK: Email
 
 Utente(Email, Username, Nome, Cognome, Password, Foto)
-    PK: Email
-    AK: Username
+    PK: Username
+    AK: Email
 
 UtentePremium(CodUtente, IBAN)
     PK: CodUtente
