@@ -110,7 +110,7 @@ TransazioneAutomatica(CRO, Annullata, Data, CodPiano, CodUtente,
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
     AK: Data, CodPiano, CodUtente
 
-TransazioneManuale(CRO, Data, CodMittente, CodDestinatario, 
+TransazioneManuale(CRO, Annullata, Data, CodMittente, CodDestinatario, 
                    NumeroCartaDiCredito)
     PK: CRO 
     FK: CodMittente REFERENCES Utente
