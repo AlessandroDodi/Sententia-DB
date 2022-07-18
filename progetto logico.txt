@@ -10,7 +10,7 @@ UtentePremium(CodUtente, IBAN)
     PK: CodUtente
     FK: CodUtente REFERENCES Utente
 
-Amicizia(Seguito, Seguente)
+Amicizia(Seguito, Seguente, Data)
     PK: Seguito, Seguente
     FK: Seguito REFERENCES Utente
     FK: Seguente REFERENCES Utente
