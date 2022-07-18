@@ -84,7 +84,7 @@ CartaCredito(Numero, DScadenza, EnteMittente, CodTitolare)
     PK: Numero 
     FK: CodTitolare REFERENCES Utente
 
-Piano(CodP, Quantita, Periodo, CodUtentePremium)
+Piano(CodP, Quantita, Periodo, Attivo, CodUtentePremium)
     PK: CodP
     FK: CodUtentePremium REFERENCES UtentePremium
 
