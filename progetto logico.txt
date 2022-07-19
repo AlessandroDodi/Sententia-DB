@@ -1,103 +1,66 @@
 Moderatore(Email, Username, Nome, Cognome, Password)
     PK: Username
     AK: Email
-
 Utente(Email, Username, Nome, Cognome, Password, Foto)
     PK: Username
     AK: Email
-
 UtentePremium(CodUtente, IBAN)
     PK: CodUtente
     FK: CodUtente REFERENCES Utente
-
 Amicizia(Seguito, Seguente, Data)
-    PK: Seguito, Seguente
+    PK: (Seguito, Seguente)
     FK: Seguito REFERENCES Utente
     FK: Seguente REFERENCES Utente
-
-
-T1) ella seguente traduzione logica, non viene controllato
-che in una data ora, un utente puo pubblicare al massimo
-1000 recensioni. Questo vincolo verra gestito successivamente con i trigger
-
-Recensione(CodR, Foto, DAbilitaVisionePubblica, Titolo, Valore, 
-           DataPubblicazione, OraPubblicazione, CodUtente)
-    PK: CodR 
-    FK: (DataPubblicazione, OraPubblicazione, CodUtente) REFERENCES Utente
-
-Oggetto(CodR, Nome, Descrizione, Categoria)
+Oggetto(CodO, Nome, Descrizione, Categoria)
+    PK: CodO
+Recensione(CodR, Foto, DataVisionePubblica, Titolo, Valore, 
+           DataPubblicazione, CodO)
     PK: CodR
-    FK: CodR REFERENCES Recensione
-
-Medaglia(CodUtente, CodR)
-    PK: CodUtente, CodR
+    FK: CodO REFERENCES Oggetto
+Medaglia(CodUtente, CodR, Timestamp)
+    PK: (CodUtente, CodR)
     FK: CodUtente REFERENCES Utente
     FK: CodR REFERENCES Recensione
-
-Report(CodUtente, CodR)]
-    PK: CodUtente, CodR
+Report(CodUtente, CodR, Tipo, Altro)
+    PK: (CodUtente, CodR)
     FK: CodUtente REFERENCES Utente
     FK: CodR REFERENCES Recensione
-
-
-T2) Nella seguente traduzione logica, non viene controllato
-che in una data ora, un utente puo pubblicare al massimo
-1000 commenti.
-Questo vincolo verra gestito successivamente con i trigger
-
-Commento(CodC, CodR, CodUtente, Data, Ora, Minuto, Testo, CodCRisposta, CodRRisposta)
-    PK: CodC, CodR
+Commento(CodC, CodR, CodU, Timestamp, Testo, CodCRisposta)
+    PK: (CodC, CodR)
     FK: CodR REFERENCES Recensione
-    FK: (CodUtente, Data, Ora) REFERENCES PubblicazioniOrarie
-    FK: (CodCRisposta, CodRRisposta) REFERENCES Commento
-
-
+    FK: CodU REFERENCES Utente
+    FK: (CodCRisposta, CodR) REFERENCES Commento
 Messaggio(CodM, CodMittente, CodDestinatario, Letto, Timestamp)
-    PK: CodM, CodMittente, CodDestinatario
+    PK: (CodM, CodMittente, CodDestinatario)
     FK: CodMittente REFERENCES Utente
     FK: CodDestinatario REFERENCES Utente
-
-
-T3) Nella seguente traduzione logica, non viene controllato che 
-per ciascun messaggio ci sia una sola tipologia ad esso associata.
-Da valutare se gestire tale vincolo nello schema logico o tramite trigger
-
 MTesto(CodM, CodMittente, CodDestinatario, Contenuto)
-    PK: CodM, CodMittente, CodDestinatario
+    PK: (CodM, CodMittente, CodDestinatario)
     FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
-
-MImmagine(CodM, CodMittente, CodDestinatario, Immagine, descrizione)
-    PK: CodM, CodMittente, CodDestinatario
+MImmagine(CodM, CodMittente, CodDestinatario, Immagine, Descrizione)
+    PK: (CodM, CodMittente, CodDestinatario)
     FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
-
 MRecensione(CodM, CodMittente, CodDestinatario, CodR)
-    PK: CodM, CodMittente, CodDestinatario
+    PK: (CodM, CodMittente, CodDestinatario)
     FK: (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio
     FK: CodR REFERENCES Recensione
-
-
-CartaCredito(Numero, DScadenza, EnteMittente, CodTitolare)
-    PK: Numero 
-    FK: CodTitolare REFERENCES Utente
-
+CartaCredito(Numero, DScadenza, EnteEmittente)
+    PK: Numero
+CartaUtente(CodCarta, CodU)
+    PK: (CodCarta, CodU)
+    FK: CodU REFERENCES Utente
+    FK: CodCarta REFERENCES Carta
 Piano(CodP, Quantita, Periodo, Attivo, CodUtentePremium)
     PK: CodP
     FK: CodUtentePremium REFERENCES UtentePremium
-
 Esclusivita(DAnticipata, CodP, CodR)
-    PK: CodP, CodR
+    PK: (CodP, CodR)
     FK: CodP REFERENCES Piano
     FK: CodR REFERENCES Recensione
-
 Iscrizione(CodP, CodUtente, DIscrizione, DAbbandono)
     PK: (CodP, CodUtente, DIscrizione) 
     FK: CodUtente REFERENCES Utente
     FK: CodP REFERENCES Piano
-
-T4) Vincolo da gestire: Verificare che l'utente abbia fatto 
-le transazioni automatiche con una delle carte di credito 
-a lui associate
-
 TransazioneAutomatica(CRO, Annullata, Data, CodPiano, CodUtente,
                       NumeroCartaDiCredito)
     PK: CRO 
@@ -105,7 +68,6 @@ TransazioneAutomatica(CRO, Annullata, Data, CodPiano, CodUtente,
     FK: CodUtente REFERENCES Utente
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
     AK: (Data, CodPiano, CodUtente)
-
 TransazioneManuale(CRO, Annullata, Data, CodMittente, CodDestinatario, 
                    NumeroCartaDiCredito)
     PK: CRO 
@@ -113,13 +75,12 @@ TransazioneManuale(CRO, Annullata, Data, CodMittente, CodDestinatario,
     FK: CodDestinatario REFERENCES Utente
     FK: NumeroCartaDiCredito REFERENCES CartaCredito
     AK: (Data, CodMittente, CodDestinatario)
-
 Ban(CodUtente, CodModeratore)
     PK: CodUtente
     FK: CodUtente REFERENCES Utente
     FK: CodModeratore REFERENCES Moderatore
-
 Rimozione(DataEffettuazione, CodR, DAnnullamento, CodModeratore)
-    PK: DataEffettuazione, CodR
+    PK: (DataEffettuazione, CodR)
     FK: CodR REFERENCES Recensione
     FK: CodModeratore REFERENCES Moderatore
+ 
