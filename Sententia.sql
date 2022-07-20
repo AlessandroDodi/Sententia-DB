@@ -45,7 +45,7 @@ CREATE TABLE Recensione(
 	CodR int PRIMARY KEY,
 	Foto varchar(55),
 	DataPubblicazione date NOT NULL,
-	DataVisionePubblica date NOT NULL,
+	DataVisionePubblica date,
 	Titolo varchar(155) NOT NULL,
 	Valore int,
 	Descrizione varchar(1555) NOT NULL,
