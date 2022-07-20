@@ -1,6 +1,8 @@
 CREATE TABLE Moderatore(
 	Email varchar(320) UNIQUE,
+	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 	Username varchar(55) PRIMARY KEY,
+	CHECK(Username NOT LIKE '%[^a-zA-Z0-9]%'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	Psw char(64) NOT NULL
@@ -12,6 +14,7 @@ CREATE TABLE Utente(
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
+	CHECK(IP LIKE '###.###.###.###'),
 	Psw char(64) NOT NULL,
 	Foto varchar(55)
 );
@@ -46,7 +49,7 @@ CREATE TABLE Recensione(
 	Titolo varchar(155) NOT NULL,
 	Valore int,
 	Descrizione varchar(1555) NOT NULL,
-	CHECK(Valore >= 0 AND Valore <= 100),
+	CHECK(Valore IS NULL OR (Valore >= 0 AND Valore <= 100)),
 	CodUtente varchar(55) NOT NULL,
 	CodO int NOT NULL,
 	FOREIGN KEY (CodO) REFERENCES Oggetto(CodO),
@@ -80,7 +83,7 @@ CREATE TABLE Commento(
 	CodUtente varchar(55) NOT NULL,
 	Data timestamp NOT NULL, 
 	Testo varchar(1555),
-	CodCRisposta int NOT NULL,
+	CodCRisposta int,
 	PRIMARY KEY(CodC, CodR),
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
@@ -132,7 +135,7 @@ CREATE TABLE MRecensione(
 CREATE TABLE CartaCredito(
 	Numero char(16) PRIMARY KEY,
 	DScadenza char(5) NOT NULL,
-	EnteEmittente varchar(30) NOT NULL,
+	EnteEmittente varchar(30) NOT NULL
 );
 
 CREATE TABLE CartaUtente(
@@ -143,7 +146,7 @@ CREATE TABLE CartaUtente(
 	FOREIGN KEY (NumeroC) REFERENCES CartaCredito(Numero)
 );
 
-CREATE TYPE periodoPiano as ENUM('settimana', 'mese', 'trimestre', 'semestre', 'anno');
+CREATE TYPE periodoPiano AS ENUM('settimana', 'mese', 'trimestre', 'semestre', 'anno');
 CREATE TABLE Piano(
 	CodP int PRIMARY KEY,
 	CodR int NOT NULL,
@@ -168,6 +171,7 @@ CREATE TABLE Iscrizione(
 	CodUtente varchar(55),
 	DIscrizione date,
 	DAbbandono date,
+	CHECK(DAbbandono IS NULL OR (DAbbandono >= DIscrizione))
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
 	FOREIGN KEY (CodP) REFERENCES Piano(CodP),
 	PRIMARY KEY (CodP, CodUtente, DIscrizione)
@@ -210,6 +214,7 @@ CREATE TABLE Rimozione(
 	DataEffettuazione date NOT NULL,
 	CodR int NOT NULL,
 	DAnnullamento date,
+	CHECK(DAnnullamento IS NULL OR (DataEffettuazione))
 	CodModeratore varchar(55) NOT NULL,
 	PRIMARY KEY(DataEffettuazione, CodR),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
