@@ -156,20 +156,21 @@ CREATE TABLE Piano(
 
 CREATE TABLE Esclusivita(
 	DataAnticipata date NOT NULL,
-	CodP int NOT NULL,
-	CodR int NOT NULL,
+	CodP int,
+	CodR int,
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
 	FOREIGN KEY (CodP) REFERENCES Piano(CodP),
 	PRIMARY KEY (CodP, CodR)
 );
 
 CREATE TABLE Iscrizione(
-	CodP int PRIMARY KEY,
-	CodUtente varchar(55) NOT NULL,
-	DIscrizione date NOT NULL,
-	DAbbandono date NOT NULL,
+	CodP int,
+	CodUtente varchar(55),
+	DIscrizione date,
+	DAbbandono date,
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
-	FOREIGN KEY (CodP) REFERENCES Piano(CodP)
+	FOREIGN KEY (CodP) REFERENCES Piano(CodP),
+	PRIMARY KEY (CodP, CodUtente, DIscrizione)
 );
 
 CREATE TABLE TransazioneAutomatica(
@@ -187,6 +188,7 @@ CREATE TABLE TransazioneAutomatica(
 
 CREATE TABLE TransazioneManuale(
 	TRN char(30) PRIMARY KEY,
+	Annullata bool NOT NULL,
 	Data date NOT NULL,
 	CodMittente varchar(55) NOT NULL,
 	CodDestinatario varchar(55) NOT NULL,
@@ -204,10 +206,10 @@ CREATE TABLE Ban(
 	FOREIGN KEY (CodModeratore) REFERENCES Utente(Username)
 );
 
-create table Rimozione(
+CREATE TABLE Rimozione(
 	DataEffettuazione date NOT NULL,
 	CodR int NOT NULL,
-	DAnnullamento date NOT NULL,
+	DAnnullamento date,
 	CodModeratore varchar(55) NOT NULL,
 	PRIMARY KEY(DataEffettuazione, CodR),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
