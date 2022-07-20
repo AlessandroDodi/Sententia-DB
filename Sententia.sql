@@ -1,6 +1,6 @@
 CREATE TABLE Moderatore(
 	Email varchar(320) UNIQUE,
-	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
+	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
 	CHECK(Username NOT LIKE '%[^a-zA-Z0-9]%'),
 	Nome varchar(55) NOT NULL,
@@ -35,10 +35,10 @@ CREATE TABLE Amicizia(
 ); 
 
 CREATE TABLE Oggetto(
-	CodO int PRIMARY KEY AUTO_INCREMENT,
+	CodO int PRIMARY KEY,
 	Nome varchar(55) NOT NULL,
 	Descrizione varchar(320) NOT NULL,
-	Categoria varchar(55) NOT NULL,
+	Categoria varchar(55) NOT NULL
 );
 
 CREATE TABLE Recensione(
@@ -71,7 +71,7 @@ CREATE TABLE Report(
 	CodR int,
 	TipoReport tipoR,
 	Altro varchar(55),
-	CHECK((TipoReport IS NULL AND Altro IS NOT NULL) OR (TipoReport IS NOT NULL AND Altro IS NULL))
+	CHECK((TipoReport IS NULL AND Altro IS NOT NULL) OR (TipoReport IS NOT NULL AND Altro IS NULL)),
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
 	PRIMARY KEY (CodUtente, CodR)
@@ -84,7 +84,6 @@ CREATE TABLE Commento(
 	Data timestamp NOT NULL, 
 	Testo varchar(1555),
 	CodCRisposta int,
-	PRIMARY KEY(CodC, CodR),
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
 	FOREIGN KEY (CodCRisposta, CodR) REFERENCES Commento,
@@ -107,7 +106,7 @@ CREATE TABLE MTesto(
 	CodMittente varchar(55),
 	CodDestinatario varchar(55),
 	Contenuto varchar(1555),
-	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario)
+	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario),
 	PRIMARY KEY (CodM, CodMittente, CodDestinatario)
 );
 
@@ -117,7 +116,7 @@ CREATE TABLE MImmagine(
 	CodDestinatario varchar(55),
 	Immagine varchar(55),
 	Descrizione varchar(1555),
-	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario)
+	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario),
 	PRIMARY KEY (CodM, CodMittente, CodDestinatario)
 );
 
@@ -127,7 +126,7 @@ CREATE TABLE MRecensione(
 	CodDestinatario varchar(55),
 	codR int NOT NULL,
 	Descrizione varchar(1555),
-	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario)
+	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
 	PRIMARY KEY (CodM, CodMittente, CodDestinatario)
 );
@@ -171,7 +170,7 @@ CREATE TABLE Iscrizione(
 	CodUtente varchar(55),
 	DIscrizione date,
 	DAbbandono date,
-	CHECK(DAbbandono IS NULL OR (DAbbandono >= DIscrizione))
+	CHECK(DAbbandono IS NULL OR (DAbbandono >= DIscrizione)),
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
 	FOREIGN KEY (CodP) REFERENCES Piano(CodP),
 	PRIMARY KEY (CodP, CodUtente, DIscrizione)
@@ -214,7 +213,7 @@ CREATE TABLE Rimozione(
 	DataEffettuazione date NOT NULL,
 	CodR int NOT NULL,
 	DAnnullamento date,
-	CHECK(DAnnullamento IS NULL OR (DataEffettuazione))
+	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento))
 	CodModeratore varchar(55) NOT NULL,
 	PRIMARY KEY(DataEffettuazione, CodR),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
