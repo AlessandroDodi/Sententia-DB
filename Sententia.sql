@@ -210,8 +210,8 @@ CREATE TABLE Ban(
 );
 
 CREATE TABLE Rimozione(
-	DataEffettuazione date NOT NULL,
-	CodR int NOT NULL,
+	DataEffettuazione date,
+	CodR int,
 	DAnnullamento date,
 	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento))
 	CodModeratore varchar(55) NOT NULL,
