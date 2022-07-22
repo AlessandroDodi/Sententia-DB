@@ -213,7 +213,7 @@ CREATE TABLE Rimozione(
 	DataEffettuazione date,
 	CodR int,
 	DAnnullamento date,
-	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento))
+	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento)),
 	CodModeratore varchar(55) NOT NULL,
 	PRIMARY KEY(DataEffettuazione, CodR),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
