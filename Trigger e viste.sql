@@ -129,3 +129,29 @@ AFTER INSERT OR UPDATE ON Esclusivita
 FOR EACH ROW EXECUTE PROCEDURE VincoloEsclusivita();
 
 ////////////////////////////////////////////////
+
+CREATE FUNCTION VincoloCartaCredito() RETURNS TRIGGER AS $$
+BEGIN
+	IF (OLD.CodPiano = NEW.CodPiano AND
+		OLD.CodUtente = NEW.CodUtente) THEN RETURN NEW;
+	END IF;
+	
+	IF NOT EXISTS (SELECT *
+				   FROM CartaUtente
+				   WHERE CodU = NEW.CodUtente AND NumeroC = NEW.NumeroCartaDiCredito)
+	THEN RAISE EXCEPTION 'L''utente non può utilizzare la carta di credito in questione';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneTransManCarta
+AFTER INSERT OR UPDATE ON TransazioneManuale
+FOR EACH ROW EXECUTE PROCEDURE VincoloCartaCredito();
+
+CREATE TRIGGER GestioneTransAutoCarta
+AFTER INSERT OR UPDATE ON TransazioneAutomatica
+FOR EACH ROW EXECUTE PROCEDURE VincoloCartaCredito();
+
+/////////////////////////////////////////////
