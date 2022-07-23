@@ -176,3 +176,26 @@ AFTER INSERT OR UPDATE ON Rimozione
 FOR EACH ROW EXECUTE PROCEDURE VincoloRimozione();
 
 ///////////////////////////////////////////
+
+CREATE FUNCTION VincoloIscrizione() RETURNS TRIGGER AS $$
+BEGIN
+	IF OLD.DAbbandono = NEW.DAbbandono THEN RETURN NEW;
+	END IF;
+	
+	IF EXISTS (SELECT *
+			   FROM Iscrizione
+			   WHERE CodP = NEW.CodP AND
+			   CodUtente = NEW.CodUtente AND
+			   DAbbandono IS NULL)
+	THEN RAISE EXCEPTION 'L''utente è già attualmente iscritto al piano';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneIscrizione
+AFTER INSERT OR UPDATE ON Iscrizione
+FOR EACH ROW EXECUTE PROCEDURE VincoloIscrizione();
+
+//////////////////////////////////////////////////////
