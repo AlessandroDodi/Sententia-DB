@@ -101,3 +101,31 @@ AFTER INSERT OR UPDATE ON MRecensione
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
 
 ///////////////////////////////////////////////
+
+CREATE FUNCTION VincoloEsclusivita() RETURNS TRIGGER AS $$
+DECLARE
+CodUtenteP varchar(55);
+BEGIN
+	IF (OLD.CodP = NEW.CodP AND
+		OLD.CodR = NEW.CodR) THEN RETURN NEW;
+	END IF;
+	
+	SELECT CodUtentePremium INTO CodUtenteP
+	FROM Piano WHERE CodP = NEW.CodP;
+	
+	IF NOT EXISTS (SELECT *
+				   FROM Recensione
+				   WHERE CodR = NEW.CodR AND CodUtente = CodUtenteP)
+	THEN RAISE EXCEPTION 'La tripla (CodM, CodMittente, CodDestinatario) esiste
+						  già in un''altra specializzazione di Messaggio';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneEsclusivita
+AFTER INSERT OR UPDATE ON Esclusivita
+FOR EACH ROW EXECUTE PROCEDURE VincoloEsclusivita();
+
+////////////////////////////////////////////////
