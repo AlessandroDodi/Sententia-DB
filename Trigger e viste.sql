@@ -19,7 +19,7 @@ WHERE R1.CodR NOT IN (
 
 Trigger (testare quando ci sono dei dati)
 
-////////////////////////////
+////////////////////////////////////////////////////
 
 /* Il primo argomento è vero se si tenta di inserire una transazione manuale, falso altrimenti */
 CREATE FUNCTION TotalitaGerarchiaTrans() RETURNS TRIGGER AS $$
@@ -59,4 +59,45 @@ CREATE TRIGGER GestioneInserTransAuto
 AFTER INSERT OR UPDATE ON TransazioneAutomatica
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaTrans(FALSE);
 
-/////////////////////////////////////////
+/////////////////////////////////////////////////
+
+CREATE FUNCTION TotalitaGerarchiaMessaggio() RETURNS TRIGGER AS $$
+BEGIN
+	IF (OLD.CodM = NEW.CodM AND
+		OLD.CodMittente = NEW.CodMittente AND
+		OLD.CodDestinatario = NEW.CodDestinatario) THEN RETURN NEW;
+	END IF;
+	
+	IF (SELECT COUNT(*)
+	    FROM (SELECT CodM, CodMittente, CodDestinatario
+			  FROM MTesto
+			  UNION
+			  SELECT CodM, CodMittente, CodDestinatario
+			  FROM MImmagine
+			  UNION
+			  SELECT CodM, CodMittente, CodDestinatario
+			  FROM MRecensione) AS CodMessaggi
+	    WHERE CodM = NEW.CodM
+		AND CodMittente = NEW.CodMittente
+	    AND CodDestinatario = NEW.CodDestinatario) = 1
+	THEN RAISE EXCEPTION 'La tripla (CodM, CodMittente, CodDestinatario) esiste
+						  già in un''altra specializzazione di Messaggio';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneInserMTesto
+AFTER INSERT OR UPDATE ON MTesto
+FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
+
+CREATE TRIGGER GestioneInserMImmagine
+AFTER INSERT OR UPDATE ON MImmagine
+FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
+
+CREATE TRIGGER GestioneInserMRecensione
+AFTER INSERT OR UPDATE ON MRecensione
+FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
+
+///////////////////////////////////////////////
