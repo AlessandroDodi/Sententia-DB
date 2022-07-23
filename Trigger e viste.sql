@@ -155,3 +155,24 @@ AFTER INSERT OR UPDATE ON TransazioneAutomatica
 FOR EACH ROW EXECUTE PROCEDURE VincoloCartaCredito();
 
 /////////////////////////////////////////////
+
+CREATE FUNCTION VincoloRimozione() RETURNS TRIGGER AS $$
+BEGIN
+	IF OLD.DAnnullamento = NEW.DAnnullamento THEN RETURN NEW;
+	END IF;
+	
+	IF EXISTS (SELECT *
+			   FROM Rimozione
+			   WHERE CodR = NEW.CodR AND DAnnullamento IS NULL)
+	THEN RAISE EXCEPTION 'La recensione è già attualmente invisibile';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneRimozione
+AFTER INSERT OR UPDATE ON Rimozione
+FOR EACH ROW EXECUTE PROCEDURE VincoloRimozione();
+
+///////////////////////////////////////////
