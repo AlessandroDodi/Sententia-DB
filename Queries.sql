@@ -93,6 +93,18 @@ FROM
 WHERE
 	Utente.Username = 'lalla'
 
+--Vedere i propri abbonamenti (attivi e disattivi)
+SELECT
+	Iscrizione.DIscrizione,
+	Piano.CodUtentePremium,
+	Piano.Periodo,
+	Piano.Quantita
+FROM
+	Iscrizione
+	JOIN Piano ON Iscrizione.CodP = Piano.CodP
+WHERE
+	Iscrizione.CodUtente = 'jimmy'
+
 --Vedere i propri abbonamenti attivi
 SELECT
 	Iscrizione.DIscrizione,
@@ -104,3 +116,6 @@ FROM
 	JOIN Piano ON Iscrizione.CodP = Piano.CodP
 WHERE
 	Iscrizione.CodUtente = 'jimmy'
+	AND Iscrizione.DAbbandono = NULL
+
+  
