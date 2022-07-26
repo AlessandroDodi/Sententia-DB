@@ -36,20 +36,6 @@ SELECT COUNT(*)
 FROM Amicizia
 WHERE Seguito = 'sara';
 
--- Vedere tutte le recensioni che ha scritto Sara
-
-SELECT Foto, Titolo, Valore, Descrizione, CodUtente, Oggetto.Nome, Categoria.Nome
-FROM RECENSIONE INNER JOIN Oggetto ON Recensione.CodO = Oggetto.CodO INNER JOIN Categoria ON Oggetto.Categoria = Categoria.CodC
-WHERE CodUtente = 'sara';
-
--- Vedere tutte le recensioni che hanno scritto gli amici di Sara
-
-SELECT Foto, Titolo, Valore, Descrizione, CodUtente, Oggetto.Nome, Categoria.Nome
-FROM RECENSIONE INNER JOIN Oggetto ON Recensione.CodO = Oggetto.CodO INNER JOIN Categoria ON OGgetto.Categoria = Categoria.CodC INNER JOIN Amicizia ON CodUtente = Amicizia.Seguente
-WHERE CodUtente = 'sara';
-
-...
-
 -- Vedere una chat fra due utenti
 
 SELECT
@@ -78,6 +64,18 @@ WHERE (Messaggio.CodMittente = 'sara'
 	OR(Messaggio.CodMittente = 'jimmy'
 		AND Messaggio.CodDestinatario = 'sara')
 
+-- Vedere tutti gli utenti della chat di Sara
+SELECT
+	Messaggio.CodDestinatario
+FROM
+	Messaggio
+WHERE (Messaggio.CodMittente = 'sara')
+UNION
+SELECT
+	Messaggio.CodMittente
+FROM
+	Messaggio
+WHERE (Messaggio.CodDestinatario = 'sara')
 
 -- Vedere le proprie carte di credito salvate
 SELECT
@@ -118,4 +116,64 @@ WHERE
 	Iscrizione.CodUtente = 'jimmy'
 	AND Iscrizione.DAbbandono = NULL
 
-  
+  -- Vedere tutte le recensioni nel feed
+CREATE VIEW RecDisponibiliPerUtente AS
+SELECT Utente.Username, R.CodR
+FROM Utente, RecensioniVisibili AS R, UtentePremium
+WHERE R.DataVisionePubblica <= CURRENT_DATE OR
+(UtentePremium.CodUtente = R.CodUtente AND
+EXISTS (
+	SELECT *
+	FROM Iscrizione, Piano, Esclusivita
+	WHERE Piano.CodUtentePremium = UtentePremium.CodUtente AND
+	Iscrizione.CodUtente = Utente.Username AND
+	Iscrizione.CodP = Piano.CodP AND
+	Iscrizione.DAbbandono IS NULL AND
+	Piano.CodP = Esclusivita.CodP AND
+	Esclusivita.CodR = R.CodR AND
+	DataAnticipata <= CURRENT_DATE
+))
+
+	--Penso serva un'altra view per questa query ma leo mi ha detto che è nel word e io non lo trovo
+	--Notifiche di messaggio non letti o di commenti/like a recensioni postate (Magari si può anche fare una query per il numero di notifiche)
+		--per ora l'ho fatto solo per i messaggi. Ma leo ha detto che gli va bene se aggiungiamo una colonna nelle tabelle medaglia e commento. Vedi tu
+		SELECT CodMittente
+		FROM Messaggio
+		WHERE CodDestinatario = 'sara' AND Letto = 'FALSE'
+		ORDER BY Data DESC
+	-- Vedere tutte le recensioni postate da un utente
+	-- Tutte le transazioni effettuate da un utente
+
+	-- Totale transazioni di un utente premium
+
+	-- Calcolo ratio moderatori utenti
+		SELECT (
+			SELECT COUNT(*)
+			FROM Moderatore
+		) / (
+			SELECT COUNT(*)
+			FROM Utente
+		)
+
+
+
+
+
+
+
+
+
+--------------------------------------
+-- -- Vedere tutte le recensioni che ha scritto Sara
+
+-- SELECT Foto, Titolo, Valore, Descrizione, CodUtente, Oggetto.Nome, Categoria.Nome
+-- FROM RECENSIONE INNER JOIN Oggetto ON Recensione.CodO = Oggetto.CodO INNER JOIN Categoria ON Oggetto.Categoria = Categoria.CodC
+-- WHERE CodUtente = 'sara';
+
+-- -- Vedere tutte le recensioni che hanno scritto gli amici di Sara
+
+-- SELECT Foto, Titolo, Valore, Descrizione, CodUtente, Oggetto.Nome, Categoria.Nome
+-- FROM RECENSIONE INNER JOIN Oggetto ON Recensione.CodO = Oggetto.CodO INNER JOIN Categoria ON OGgetto.Categoria = Categoria.CodC INNER JOIN Amicizia ON CodUtente = Amicizia.Seguente
+-- WHERE CodUtente = 'sara';
+
+-- ...
