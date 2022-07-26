@@ -155,6 +155,7 @@ CREATE TABLE Piano(
 	CodUtentePremium varchar(55) NOT NULL, 
 	Quantita int NOT NULL, 
 	Periodo periodoPiano NOT NULL,
+	Attivo bool NOT NULL,
 	FOREIGN KEY (CodUtentePremium) REFERENCES UtentePremium(CodUtente)
 );
 
