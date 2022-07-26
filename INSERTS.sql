@@ -119,7 +119,8 @@ INSERT INTO MImmagine
   (CodM, CodMittente, CodDestinatario, Immagine)
 VALUES
   ('1', 'marcus', 'lalla', '/img/198271928312982.png'),
-  ('2', 'lalla', 'marcus', '/img/091823012983179.png');
+  ('2', 'lalla', 'marcus', '/img/091823012983179.png'),
+  ('3', 'sara', 'jimmy', '/img/981239183787233.png');
 
 INSERT INTO MRecensione
   (CodM, CodMittente, CodDestinatario, codR)
@@ -145,10 +146,10 @@ VALUES
   ('5785097781567052', 'marcus');
 
 INSERT INTO Piano
-  (CodP, CodR, CodUtentePremium, Quantita, Periodo)
+  (CodP, CodUtentePremium, Quantita, Periodo)
 VALUES
-  ('1', '6', 'sara', '1', 'trimestre'),
-  ('2', '7', 'lalla', '2', 'anno');
+  ('1', 'sara', '1', 'trimestre'),
+  ('2', 'lalla', '2', 'anno');
 
 INSERT INTO Esclusivita
   (DataAnticipata, CodP, CodR)

@@ -152,12 +152,10 @@ CREATE TABLE CartaUtente(
 CREATE TYPE periodoPiano AS ENUM('settimana', 'mese', 'trimestre', 'semestre', 'anno');
 CREATE TABLE Piano(
 	CodP int PRIMARY KEY,
-	CodR int NOT NULL,
 	CodUtentePremium varchar(55) NOT NULL, 
 	Quantita int NOT NULL, 
 	Periodo periodoPiano NOT NULL,
-	FOREIGN KEY (CodUtentePremium) REFERENCES UtentePremium(CodUtente),
-	FOREIGN KEY (CodR) REFERENCES Recensione(CodR)
+	FOREIGN KEY (CodUtentePremium) REFERENCES UtentePremium(CodUtente)
 );
 
 CREATE TABLE Esclusivita(

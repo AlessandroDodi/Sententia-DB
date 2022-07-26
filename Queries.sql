@@ -11,7 +11,7 @@ FROM Utente
 WHERE Username = 'sara' AND Psw = 'aisdouh78biknjpP';
 
 
--- Vedere tutte gli amici di Sara
+-- Vedere tutte gli amici di Sara---
 
 SELECT *
 FROM Amicizia
@@ -52,5 +52,55 @@ WHERE CodUtente = 'sara';
 
 -- Vedere una chat fra due utenti
 
-SELECT Messaggio.CodMittente, Messaggio.CodDestinatario, Messaggio.Letto, Messaggio.Data, MTesto.Contenuto, MImmagine.Immagine, MImmagine.Descrizione, Recensione.CodR, Recensione.Descrizione
-FROM Messaggio INNER JOIN MTesto ON Messaggio.CodM = MTesto.CodM
+SELECT
+	Messaggio.CodMittente,
+	Messaggio.CodDestinatario,
+	Messaggio.Letto,
+	Messaggio.Data,
+	MTesto.Contenuto,
+	MImmagine.Immagine,
+	MImmagine.Descrizione,
+	MRecensione.CodR,
+	MRecensione.Descrizione
+FROM
+	Messaggio
+	FULL JOIN MTesto ON Messaggio.CodM = MTesto.CodM
+		AND Messaggio.CodMittente = MTesto.CodMittente
+		AND Messaggio.CodDestinatario = MTesto.CodDestinatario
+	FULL JOIN MImmagine ON Messaggio.CodM = MImmagine.CodM
+		AND Messaggio.CodMittente = MImmagine.CodMittente
+		AND Messaggio.CodDestinatario = MImmagine.CodDestinatario
+	FULL JOIN MRecensione ON Messaggio.CodM = MRecensione.CodM
+		AND Messaggio.CodMittente = MRecensione.CodMittente
+		AND Messaggio.CodDestinatario = MRecensione.CodDestinatario
+WHERE (Messaggio.CodMittente = 'sara'
+	AND Messaggio.CodDestinatario = 'jimmy')
+	OR(Messaggio.CodMittente = 'jimmy'
+		AND Messaggio.CodDestinatario = 'sara')
+
+
+-- Vedere le proprie carte di credito salvate
+SELECT
+	CartaCredito.Numero,
+	CartaCredito.DScadenza,
+	CartaCredito.EnteEmittente,
+	Utente.Nome,
+	Utente.Cognome
+FROM
+	CartaCredito
+	JOIN CartaUtente ON CartaCredito.NUmero = CartaUtente.NumeroC
+	JOIN Utente ON CartaUtente.CodU = Utente.Username
+WHERE
+	Utente.Username = 'lalla'
+
+--Vedere i propri abbonamenti attivi
+SELECT
+	Iscrizione.DIscrizione,
+	Piano.CodUtentePremium,
+	Piano.Periodo,
+	Piano.Quantita
+FROM
+	Iscrizione
+	JOIN Piano ON Iscrizione.CodP = Piano.CodP
+WHERE
+	Iscrizione.CodUtente = 'jimmy'
