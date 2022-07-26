@@ -14,7 +14,6 @@ CREATE TABLE Utente(
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
-	CHECK(IP LIKE '###.###.###.###'),
 	Psw char(64) NOT NULL,
 	Foto varchar(55)
 );
@@ -190,7 +189,7 @@ CREATE TABLE TransazioneAutomatica(
 	NumeroCartaDiCredito char(16) NOT NULL,
 	FOREIGN KEY (NumeroCartaDiCredito) REFERENCES CartaCredito(Numero),
 	FOREIGN KEY (CodPiano) REFERENCES Piano(CodP),
-	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
+	FOREIGN KEY (CodUtente) REFERENCES Moderatore(Username),
 	UNIQUE(Data, CodPiano, CodUtente)
 );
 
@@ -211,16 +210,16 @@ CREATE TABLE Ban(
 	CodUtente varchar(55) PRIMARY KEY,
 	CodModeratore varchar(55) NOT NULL,
 	FOREIGN KEY (CodUtente) REFERENCES Utente(Username),
-	FOREIGN KEY (CodModeratore) REFERENCES Utente(Username)
+	FOREIGN KEY (CodModeratore) REFERENCES Moderatore(Username)
 );
 
 CREATE TABLE Rimozione(
 	DataEffettuazione date,
 	CodR int,
 	DAnnullamento date,
-	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento))
+	CHECK(DAnnullamento IS NULL OR (DataEffettuazione <= DAnnullamento)),
 	CodModeratore varchar(55) NOT NULL,
 	PRIMARY KEY(DataEffettuazione, CodR),
 	FOREIGN KEY (CodR) REFERENCES Recensione(CodR),
-	FOREIGN KEY (CodModeratore) REFERENCES Utente(Username)
+	FOREIGN KEY (CodModeratore) REFERENCES Moderatore(Username)
 );
