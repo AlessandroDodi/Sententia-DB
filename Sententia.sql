@@ -14,6 +14,7 @@ CREATE TABLE Utente(
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
+	CHECK(IP LIKE '###.###.###.###'),
 	Psw char(64) NOT NULL,
 	Foto varchar(55)
 );
