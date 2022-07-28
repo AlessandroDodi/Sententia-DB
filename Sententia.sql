@@ -185,12 +185,12 @@ CREATE TABLE TransazioneAutomatica(
 	Annullata bool NOT NULL,
 	Data date NOT NULL,
 	CodPiano int NOT NULL,
-	CodUtente varchar(55) NOT NULL,
+	CodMittente varchar(55) NOT NULL,
 	NumeroCartaDiCredito char(16) NOT NULL,
 	FOREIGN KEY (NumeroCartaDiCredito) REFERENCES CartaCredito(Numero),
 	FOREIGN KEY (CodPiano) REFERENCES Piano(CodP),
-	FOREIGN KEY (CodUtente) REFERENCES Moderatore(Username),
-	UNIQUE(Data, CodPiano, CodUtente)
+	FOREIGN KEY (CodMittente) REFERENCES Utente(Username),
+	UNIQUE(Data, CodPiano, CodMittente)
 );
 
 CREATE TABLE TransazioneManuale(
@@ -200,9 +200,10 @@ CREATE TABLE TransazioneManuale(
 	CodMittente varchar(55) NOT NULL,
 	CodDestinatario varchar(55) NOT NULL,
 	NumeroCartaDiCredito char(16) NOT NULL,
+	Quantita INTEGER NOT NULL,
 	FOREIGN KEY (NumeroCartaDiCredito) REFERENCES CartaCredito(Numero),
 	FOREIGN KEY (CodMittente) REFERENCES Utente(Username),
-	FOREIGN KEY (CodDestinatario) REFERENCES Utente(Username),
+	FOREIGN KEY (CodDestinatario) REFERENCES UtentePremium(Username),
 	UNIQUE(Data, CodMittente, CodDestinatario)
 );
 
