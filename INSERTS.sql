@@ -31,30 +31,15 @@ VALUES
   ('marcus', 'jimmy', '2021-04-07'),
   ('jimmy', 'sara', '2022-05-12');
 
-INSERT INTO Categoria
-  (CodC, Nome)
-VALUES 
-  ('1', 'Film'),
-  ('2', 'Canzoni'),
-  ('3', 'Politica'),
-  ('4', 'Tecnologia'),
-  ('5', 'Eventi'),
-  ('6', 'Poesia'),
-  ('7', 'Podcast'),
-  ('8', 'Frasi'),
-  ('9', 'Sport'),
-  ('10', 'Animali'),
-  ('11', 'Pensieri');
-
 INSERT INTO Oggetto
   (CodO, Nome, Descrizione, Categoria)
 VALUES 
-  ('1', 'Interstellar', 'Un gruppo di scienziati appartenenti un tempo alla NASA, sfruttando un "wormhole" per superare le limitazioni fisiche del viaggio spaziale e coprire le immense distanze del viaggio interstellare, organizza una serie di missioni spaziali alla ricerca di un pianeta abitabile.', '1'),
-  ('2', 'Will hunting', 'In un quartiere povero di Boston, Will Hunting (Matt Damon), venti anni, vive in modo precario e scombinato insieme ad alcuni amici, tra i quali spicca il suo migliore amico Chuckie, e guadagna qualcosa pulendo i pavimenti nel dipartimento di matematica del famoso Massachusetts Institute of Technology (MIT).', '1'),
-  ('3', 'Cane', 'l cane è un quadrupede ed ha il corpo coperto di pelo. Le sue zampe sono lunghe, forti, snelle, atte alla corsa. Il cane cammina sulla punta delle dita, come il gatto, ma il suo passo non è silenzioso, perché i suoi artigli non sono retrattili e quando cammina li batte sul suolo.', '10'),
-  ('4', 'Joe Rogan', 'The Joe Rogan Experience è un podcast ospitato dal comico, presentatore e commentatore a colori UFC americano Joe Rogan. È stato lanciato il 24 dicembre 2009 su YouTube da Rogan e dal comico Brian Redban, che ne è stato co-conduttore e produttore fino al 2013, quando è stato sostituito da Jamie Vernon.', '7'),
-  ('5', 'The genius of the crowd', 'Famosa poesia di Charles Bukowski', '6'),
-  ('6', 'Bitcoin website', '', '4');
+  ('1', 'Interstellar', 'Un gruppo di scienziati appartenenti un tempo alla NASA, sfruttando un "wormhole" per superare le limitazioni fisiche del viaggio spaziale e coprire le immense distanze del viaggio interstellare, organizza una serie di missioni spaziali alla ricerca di un pianeta abitabile.', 'Film'),
+  ('2', 'Will hunting', 'In un quartiere povero di Boston, Will Hunting (Matt Damon), venti anni, vive in modo precario e scombinato insieme ad alcuni amici, tra i quali spicca il suo migliore amico Chuckie, e guadagna qualcosa pulendo i pavimenti nel dipartimento di matematica del famoso Massachusetts Institute of Technology (MIT).', 'Film'),
+  ('3', 'Cane', 'l cane è un quadrupede ed ha il corpo coperto di pelo. Le sue zampe sono lunghe, forti, snelle, atte alla corsa. Il cane cammina sulla punta delle dita, come il gatto, ma il suo passo non è silenzioso, perché i suoi artigli non sono retrattili e quando cammina li batte sul suolo.', 'Animali'),
+  ('4', 'Joe Rogan', 'The Joe Rogan Experience è un podcast ospitato dal comico, presentatore e commentatore a colori UFC americano Joe Rogan. È stato lanciato il 24 dicembre 2009 su YouTube da Rogan e dal comico Brian Redban, che ne è stato co-conduttore e produttore fino al 2013, quando è stato sostituito da Jamie Vernon.', 'Podcast'),
+  ('5', 'The genius of the crowd', 'Famosa poesia di Charles Bukowski', 'Poesia'),
+  ('6', 'Bitcoin website', '', 'Tecnologia');
 
 INSERT INTO Recensione
   (CodR, Foto, DataPubblicazione, Titolo, Valore, Descrizione, CodUtente, CodO)
