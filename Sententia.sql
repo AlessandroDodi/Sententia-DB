@@ -46,6 +46,7 @@ CREATE TABLE Recensione(
 	Foto varchar(55),
 	DataPubblicazione date NOT NULL,
 	DataVisionePubblica date,
+	CHECK(DataVisionePubblica IS NULL OR DataVisionePubblica >= DataPubblicazione),
 	Titolo varchar(155) NOT NULL,
 	Valore int,
 	Descrizione varchar(1555) NOT NULL,
