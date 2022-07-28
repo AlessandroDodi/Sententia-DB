@@ -34,11 +34,6 @@ CREATE TABLE Amicizia(
 	Data timestamp NOT NULL
 ); 
 
-CREATE TABLE Categoria(
-	CodC int PRIMARY KEY,
-	Nome varchar(55)
-);
-
 CREATE TABLE Oggetto(
 	CodO int PRIMARY KEY,
 	Nome varchar(55) NOT NULL,
