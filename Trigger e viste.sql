@@ -1,12 +1,12 @@
-Viste
+-- Viste
 
-Vista contenente tutti i piani attivi:
+-- Vista contenente tutti i piani attivi:
 CREATE VIEW PianiAttivi AS 
 SELECT *
 FROM Piano
-WHERE Attivo = TRUE
+WHERE Attivo = TRUE;
 
-Vista contenente tutte le recensioni visibili:
+-- Vista contenente tutte le recensioni visibili:
 CREATE VIEW RecensioniVisibili AS 
 SELECT R1.*
 FROM Recensione AS R1
@@ -15,11 +15,11 @@ WHERE R1.CodR NOT IN (
 	FROM Recensione AS R2, Rimozione
 	WHERE R2.CodR = Rimozione.CodR
 	  AND Rimozione.DAnnullamento IS NULL
-)
+);
 
-Trigger (testare quando ci sono dei dati)
+-- Trigger (testare quando ci sono dei dati)
 
-////////////////////////////////////////////////////
+-- ////////////////////////////////////////////////////
 
 /* Il primo argomento è vero se si tenta di inserire una transazione manuale, falso altrimenti */
 CREATE FUNCTION TotalitaGerarchiaTrans() RETURNS TRIGGER AS $$
@@ -32,7 +32,7 @@ BEGIN
 	IF TG_NARGS <> 1 THEN RAISE EXCEPTION 'Argomenti forniti erroneamente';
 	END IF;
 	
-	IF TG_ARGV[0] = TRUE
+	IF TG_ARGV[0] = 'true'
 	THEN
 		Cond = EXISTS(SELECT TRN
 			      FROM TransazioneAutomatica
@@ -52,14 +52,14 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneInserTransManuale
-AFTER INSERT OR UPDATE ON TransazioneManuale
+BEFORE INSERT OR UPDATE ON TransazioneManuale
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaTrans(TRUE);
 
 CREATE TRIGGER GestioneInserTransAuto
-AFTER INSERT OR UPDATE ON TransazioneAutomatica
+BEFORE INSERT OR UPDATE ON TransazioneAutomatica
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaTrans(FALSE);
 
-/////////////////////////////////////////////////
+-- /////////////////////////////////////////////////
 
 CREATE FUNCTION TotalitaGerarchiaMessaggio() RETURNS TRIGGER AS $$
 BEGIN
@@ -68,20 +68,22 @@ BEGIN
 		OLD.CodDestinatario = NEW.CodDestinatario) THEN RETURN NEW;
 	END IF;
 	
-	IF (SELECT COUNT(*)
-	    FROM (SELECT CodM, CodMittente, CodDestinatario
-			  FROM MTesto
-			  UNION
-			  SELECT CodM, CodMittente, CodDestinatario
-			  FROM MImmagine
-			  UNION
-			  SELECT CodM, CodMittente, CodDestinatario
-			  FROM MRecensione) AS CodMessaggi
-	    WHERE CodM = NEW.CodM
-		AND CodMittente = NEW.CodMittente
-	    AND CodDestinatario = NEW.CodDestinatario) = 1
-	THEN RAISE EXCEPTION 'La tripla (CodM, CodMittente, CodDestinatario) esiste
-						  già in un''altra specializzazione di Messaggio';
+	IF EXISTS ( SELECT *
+	    		FROM (SELECT CodM, CodMittente, CodDestinatario
+					  FROM MTesto
+					  UNION
+					  SELECT CodM, CodMittente, CodDestinatario
+					  FROM MImmagine
+					  UNION
+					  SELECT CodM, CodMittente, CodDestinatario
+					  FROM MRecensione) AS CodMessaggi
+	    		WHERE CodM = NEW.CodM
+				AND CodMittente = NEW.CodMittente
+	    		AND CodDestinatario = NEW.CodDestinatario)
+	THEN RAISE EXCEPTION 'La tripla ("%", "%", "%") esiste
+						  già in un''altra specializzazione di Messaggio', NEW.CodM,
+						  NEW.CodMittente,
+						  NEW.CodDestinatario;
 	END IF;
 	
 	RETURN NEW;
@@ -89,18 +91,18 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneInserMTesto
-AFTER INSERT OR UPDATE ON MTesto
+BEFORE INSERT OR UPDATE ON MTesto
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
 
 CREATE TRIGGER GestioneInserMImmagine
-AFTER INSERT OR UPDATE ON MImmagine
+BEFORE INSERT OR UPDATE ON MImmagine
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
 
 CREATE TRIGGER GestioneInserMRecensione
-AFTER INSERT OR UPDATE ON MRecensione
+BEFORE INSERT OR UPDATE ON MRecensione
 FOR EACH ROW EXECUTE PROCEDURE TotalitaGerarchiaMessaggio();
 
-///////////////////////////////////////////////
+-- ///////////////////////////////////////////////
 
 CREATE FUNCTION VincoloEsclusivita() RETURNS TRIGGER AS $$
 DECLARE
@@ -125,20 +127,20 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneEsclusivita
-AFTER INSERT OR UPDATE ON Esclusivita
+BEFORE INSERT OR UPDATE ON Esclusivita
 FOR EACH ROW EXECUTE PROCEDURE VincoloEsclusivita();
 
-////////////////////////////////////////////////
+-- ////////////////////////////////////////////////
 
 CREATE FUNCTION VincoloCartaCredito() RETURNS TRIGGER AS $$
 BEGIN
-	IF (OLD.CodPiano = NEW.CodPiano AND
-		OLD.CodUtente = NEW.CodUtente) THEN RETURN NEW;
+	IF (OLD.NumeroCartaDiCredito = NEW.NumeroCartaDiCredito AND
+		OLD.CodMittente = NEW.CodMittente) THEN RETURN NEW;
 	END IF;
 	
 	IF NOT EXISTS (SELECT *
 				   FROM CartaUtente
-				   WHERE CodU = NEW.CodUtente AND NumeroC = NEW.NumeroCartaDiCredito)
+				   WHERE CodU = NEW.CodMittente AND NumeroC = NEW.NumeroCartaDiCredito)
 	THEN RAISE EXCEPTION 'L''utente non può utilizzare la carta di credito in questione';
 	END IF;
 	
@@ -147,14 +149,14 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneTransManCarta
-AFTER INSERT OR UPDATE ON TransazioneManuale
+BEFORE INSERT OR UPDATE ON TransazioneManuale
 FOR EACH ROW EXECUTE PROCEDURE VincoloCartaCredito();
 
 CREATE TRIGGER GestioneTransAutoCarta
-AFTER INSERT OR UPDATE ON TransazioneAutomatica
+BEFORE INSERT OR UPDATE ON TransazioneAutomatica
 FOR EACH ROW EXECUTE PROCEDURE VincoloCartaCredito();
 
-/////////////////////////////////////////////
+-- /////////////////////////////////////////////
 
 CREATE FUNCTION VincoloRimozione() RETURNS TRIGGER AS $$
 BEGIN
@@ -172,10 +174,10 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneRimozione
-AFTER INSERT OR UPDATE ON Rimozione
+BEFORE INSERT OR UPDATE ON Rimozione
 FOR EACH ROW EXECUTE PROCEDURE VincoloRimozione();
 
-///////////////////////////////////////////
+-- ///////////////////////////////////////////
 
 CREATE FUNCTION VincoloIscrizione() RETURNS TRIGGER AS $$
 BEGIN
@@ -195,7 +197,7 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER GestioneIscrizione
-AFTER INSERT OR UPDATE ON Iscrizione
+BEFORE INSERT OR UPDATE ON Iscrizione
 FOR EACH ROW EXECUTE PROCEDURE VincoloIscrizione();
 
-//////////////////////////////////////////////////////
+-- //////////////////////////////////////////////////////
