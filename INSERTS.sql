@@ -119,8 +119,7 @@ INSERT INTO MImmagine
   (CodM, CodMittente, CodDestinatario, Immagine)
 VALUES
   ('1', 'marcus', 'lalla', '/img/198271928312982.png'),
-  ('2', 'lalla', 'marcus', '/img/091823012983179.png'),
-  ('3', 'sara', 'jimmy', '/img/981239183787233.png');
+  ('2', 'lalla', 'marcus', '/img/091823012983179.png');
 
 INSERT INTO MRecensione
   (CodM, CodMittente, CodDestinatario, codR)
@@ -146,10 +145,10 @@ VALUES
   ('5785097781567052', 'marcus');
 
 INSERT INTO Piano
-  (CodP, CodUtentePremium, Quantita, Periodo)
+  (CodP, CodUtentePremium, Quantita, Periodo, Attivo)
 VALUES
-  ('1', 'sara', '1', 'trimestre'),
-  ('2', 'lalla', '2', 'anno');
+  ('1', 'sara', '1', 'trimestre', 'true'),
+  ('2', 'lalla', '2', 'anno', 'true');
 
 INSERT INTO Esclusivita
   (DataAnticipata, CodP, CodR)
@@ -160,22 +159,23 @@ VALUES
 INSERT INTO Iscrizione
   (CodP, CodUtente, DIscrizione, DAbbandono)
 VALUES
+  ('1', 'jimmy', '2022-07-26', null),
   ('1', 'MarioRossi', '2022-03-11', '2022-06-08'),
   ('2', 'MarioRossi', '2022-04-21', '2022-07-13'),
   ('1', 'jimmy', '2022-04-22', '2022-06-11'),
   ('2', 'jimmy', '2022-05-05', '2022-05-30');
 
 INSERT INTO TransazioneAutomatica
-  (TRN, Annullata, Data, CodPiano, CodUtente, NumeroCartaDiCredito)
+  (TRN, Annullata, Data, CodPiano, CodMittente, NumeroCartaDiCredito)
 VALUES
   ('KSBSJUP2130PNISUEHBJ98KNJLIT00', 'false', '2022-03-11', '1', 'MarioRossi', '5328087472838500'),
   ('LKNSKJDO0921KJBKJSBD91JKSDIT00', 'false', '2022-04-21', '2','MarioRossi', '5328087472838500');
 
 INSERT INTO TransazioneManuale
-  (TRN, Annullata, Data, CodMittente, CodDestinatario, NumeroCartaDiCredito)
+  (TRN, Annullata, Data, CodMittente, CodDestinatario, NumeroCartaDiCredito, Quantita)
 VALUES
-  ('J98NKSDLKBDKASLB78912ASDJKIT00', 'false', '2022-06-1', 'jimmy', 'sara', '5243906784563827'),
-  ('LKNSKJDO0921KJBKJSBD91JKSDIT00', 'false', '2022-05-30', 'jimmy', 'lalla', '5243906784563827');
+  ('J98NKSDLKBDKASLB78912ASDJKIT00', 'false', '2022-06-1', 'jimmy', 'sara', '5243906784563827', '20'),
+  ('55FBQSFGLJZ4PEKPX2XWR59UCHYFY3', 'false', '2022-05-30', 'jimmy', 'lalla', '5243906784563827', '30');
 
 INSERT INTO Ban
   (CodUtente, CodModeratore)
