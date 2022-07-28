@@ -63,16 +63,18 @@ WHERE (Messaggio.CodMittente = 'sara'
 	AND Messaggio.CodDestinatario = 'jimmy')
 	OR(Messaggio.CodMittente = 'jimmy'
 		AND Messaggio.CodDestinatario = 'sara')
+ORDER BY DESC Messaggio.data
+
 
 -- Vedere tutti gli utenti della chat di Sara
-SELECT
-	Messaggio.CodDestinatario
+SELECT DISTINCT Messaggio.CodDestinatario
 FROM
 	Messaggio
 WHERE (Messaggio.CodMittente = 'sara')
+
 UNION
-SELECT
-	Messaggio.CodMittente
+
+SELECT DISTINCT Messaggio.CodMittente
 FROM
 	Messaggio
 WHERE (Messaggio.CodDestinatario = 'sara')
@@ -134,6 +136,10 @@ EXISTS (
 	DataAnticipata <= CURRENT_DATE
 ))
 
+SELECT * 
+FROM RecDisponibiliPerUtente
+WHERE RecDisponibiliPerUtente.Username = '?'
+
 	--Penso serva un'altra view per questa query ma leo mi ha detto che è nel word e io non lo trovo
 	--Notifiche di messaggio non letti o di commenti/like a recensioni postate (Magari si può anche fare una query per il numero di notifiche)
 		--per ora l'ho fatto solo per i messaggi. Ma leo ha detto che gli va bene se aggiungiamo una colonna nelle tabelle medaglia e commento. Vedi tu
@@ -141,10 +147,44 @@ EXISTS (
 		FROM Messaggio
 		WHERE CodDestinatario = 'sara' AND Letto = 'FALSE'
 		ORDER BY Data DESC
-	-- Vedere tutte le recensioni postate da un utente
-	-- Tutte le transazioni effettuate da un utente
 
-	-- Totale transazioni di un utente premium
+	-- Vedere tutte le recensioni postate da un utente
+	-- Un utente vuole visualizzare tutte le recensioni pubblicate da un'altro utente
+		SELECT * 
+		FROM RecDisponibiliPerUtente, RecensioniVisibili
+		WHERE RecDisponibiliPerUtente.CodR = RecensioniVisibili.CodR AND
+			 RecDisponibiliPerUtente.Username = '?' AND 
+			 RecensioniVisibili.CodUtente = '?'
+
+
+
+	-- ELENCARE tutte le transazioni effettuate da un utente
+
+		SELECT TRN, Annullata Data, NumeroCartaDiCredito, Piano.Quantita
+		FROM TransazioneAutomatica, Piano
+		WHERE TransazioneAutomatica.CodPiano = Piano.CodP AND 
+			TransazioneAutomatica.CodMittente = ?
+
+		UNION
+
+		SELECT TRN, Annullata, Data, NumeroCartaDiCredito, Quantita
+		FROM TransazioneManuale
+		WHERE TransazioneManuale.CodMittente = ?
+
+	-- Totale donazioni ricevuti di un utente premium
+		SELECT SUM(Total)
+		FROM (
+			SELECT SUM(Quantita) AS Total
+			FROM TransazioneManuale
+			WHERE CodDestinatario = '?'
+
+			UNION
+
+			SELECT SUM(Piano.Quantita) AS Total
+			FROM TransazioneAutomatica, Piano
+			WHERE TransazioneAutomatica.CodPiano = Piano.CodP AND 
+				Piano.CodUtentePremium = '?'
+		)
 
 	-- Calcolo ratio moderatori utenti
 		SELECT (
@@ -157,18 +197,12 @@ EXISTS (
 
 
 
-
-
-
-
-
-
 --------------------------------------
 -- -- Vedere tutte le recensioni che ha scritto Sara
 
 -- SELECT Foto, Titolo, Valore, Descrizione, CodUtente, Oggetto.Nome, Categoria.Nome
--- FROM RECENSIONE INNER JOIN Oggetto ON Recensione.CodO = Oggetto.CodO INNER JOIN Categoria ON Oggetto.Categoria = Categoria.CodC
--- WHERE CodUtente = 'sara';
+-- FROM RecDisponibiliPerUtente
+-- WHERE RecDisponibiliPerUtente.CodU
 
 -- -- Vedere tutte le recensioni che hanno scritto gli amici di Sara
 
