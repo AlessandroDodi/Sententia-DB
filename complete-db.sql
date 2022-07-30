@@ -1,7 +1,7 @@
 -- creazione tabelle
 
 CREATE TABLE Moderatore(
-	Email varchar(320) UNIQUE,
+	Email varchar(320) NOT NULL UNIQUE,
 	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
 	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
@@ -11,7 +11,7 @@ CREATE TABLE Moderatore(
 );
 
 CREATE TABLE Utente(
-	Email varchar(320) UNIQUE,
+	Email varchar(320) NOT NULL UNIQUE,
 	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
 	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
