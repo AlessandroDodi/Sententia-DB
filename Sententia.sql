@@ -10,7 +10,9 @@ CREATE TABLE Moderatore(
 
 CREATE TABLE Utente(
 	Email varchar(320) UNIQUE,
+	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
+	CHECK(Username NOT LIKE '%[^a-zA-Z0-9]%'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
