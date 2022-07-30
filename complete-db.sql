@@ -450,6 +450,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE USER client WITH ENCRYPTED PASSWORD 'topolino2022';
 
+GRANT ALL ON ALL TABLES IN SCHEMA "public" TO client;
 GRANT SELECT, INSERT, UPDATE ON utente to client;
 GRANT SELECT ON moderatore to client;
 
