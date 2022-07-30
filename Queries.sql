@@ -154,7 +154,7 @@ WHERE RecDisponibiliPerUtente.Username = '?'
 		FROM TransazioneManuale
 		WHERE TransazioneManuale.CodMittente = ?
 
-	-- Totale donazioni ricevuti di un utente premium
+	-- Totale transazioni ricevuti di un utente premium
 		SELECT SUM(Total)
 		FROM (
 			SELECT SUM(Quantita) AS Total

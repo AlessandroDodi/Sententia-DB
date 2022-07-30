@@ -10,22 +10,22 @@ GRANT SELECT(email, username, nome, cognome, ip, foto, psw),
       UPDATE(email, nome, cognome, ip, foto) ON utente to client;
 
 
-CREATE FUNCTION delete_user(IN user VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN SECURITY DEFINER AS $$
+CREATE FUNCTION delete_user(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN SECURITY DEFINER AS $$
         BEGIN
-            IF NOT (SELECT user_login(user, pswd)) = TRUE 
+            IF NOT (SELECT user_login(usr, pswd)) = TRUE 
             THEN
                 RETURN FALSE;
             END IF;
 
-            DELETE FROM utente WHERE username = user;
+            DELETE FROM utente WHERE username = usr;
             RETURN TRUE;
         END           
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION change_psw(IN user VARCHAR(55), IN new_pswd VARCHAR(64), IN old_pswd VARCHAR(64)) 
+CREATE FUNCTION change_psw(IN usr VARCHAR(55), IN new_pswd VARCHAR(64), IN old_pswd VARCHAR(64)) 
     RETURNS BOOLEAN SECURITY DEFINER AS $$
         BEGIN
-            IF NOT (SELECT user_login(user, old_pswd)) = TRUE 
+            IF NOT (SELECT user_login(usr, old_pswd)) = TRUE 
             THEN
                 RETURN FALSE;
             END IF;
@@ -35,28 +35,28 @@ CREATE FUNCTION change_psw(IN user VARCHAR(55), IN new_pswd VARCHAR(64), IN old_
         END           
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION moderatore_login(IN user VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
+CREATE FUNCTION moderatore_login(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
     DECLARE
-        successful BOOLEAN
+        successful BOOLEAN;
     BEGIN
 
         SELECT (psw = crypt(pswd, psw)) INTO successful
         FROM moderatore
-        WHERE username = user;
+        WHERE username = usr;
 
         RETURN successful;
 
     END;
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION user_login(IN user VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
+CREATE FUNCTION user_login(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
     DECLARE
-        successful BOOLEAN
+        successful BOOLEAN;
     BEGIN
 
         SELECT (psw = crypt(pswd, psw)) INTO successful
         FROM utente
-        WHERE username = user;
+        WHERE username = usr;
 
         RETURN successful;
 
@@ -68,7 +68,7 @@ BEGIN
 	IF OLD.psw = NEW.psw THEN RETURN NEW;
 	END IF;
 	
-	NEW.psw = crypt(pswd, gen_salt('bf'));
+	NEW.psw := crypt(NEW.psw, gen_salt('bf'));
 	
 	RETURN NEW;
 END;
