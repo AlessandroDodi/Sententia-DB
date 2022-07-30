@@ -199,7 +199,7 @@ CREATE TABLE TransazioneManuale(
 	Quantita INTEGER NOT NULL,
 	FOREIGN KEY (NumeroCartaDiCredito) REFERENCES CartaCredito(Numero),
 	FOREIGN KEY (CodMittente) REFERENCES Utente(Username),
-	FOREIGN KEY (CodDestinatario) REFERENCES UtentePremium(Username),
+	FOREIGN KEY (CodDestinatario) REFERENCES UtentePremium(CodUtente),
 	UNIQUE(Data, CodMittente, CodDestinatario)
 );
 
