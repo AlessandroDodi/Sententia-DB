@@ -7,7 +7,7 @@ CREATE TABLE Moderatore(
 	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
-	Psw char(64) NOT NULL
+	Psw varchar(72) NOT NULL
 );
 
 CREATE TABLE Utente(
@@ -19,7 +19,7 @@ CREATE TABLE Utente(
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
 	CHECK(IP ~ '^(\d{3}\.){3}\d{3}$'),
-	Psw char(64) NOT NULL,
+	Psw varchar(72) NOT NULL,
 	Foto varchar(55)
 );
 
@@ -544,14 +544,14 @@ VALUES
 INSERT INTO Utente
   (Email, Username, Nome, Cognome, Psw, IP, Foto)
 VALUES 
-  ('sarafornaciari@gmail.com', 'sara', 'Sara', 'Fornaciari', 'aisdouh78biknjpP', '127.000.000.001', 'images/users/sara.png'),
-  ('mariorossi@gmail.com', 'MarioRossi', 'Mario', 'Rossi', '2318sk!oj%%3', '127.000.000.002', 'images/users/MarioRossi.png'),
-  ('lauracastiello@gmail.com', 'lalla', 'Laura', 'Castiello', 'ojabsld328!k', '127.000.000.003', 'images/users/default.png'),
-  ('jimmy@gmail.com', 'jimmy', 'Jimmy', 'Brown', '3vfds2', '127.000.000.004', 'images/users/jimmy.png'),
-  ('groot@gmail.com', 'groot', 'Groot', 'Avenger', 'dksajdlsa?', '127.000.000.005', 'images/users/default.png'),
-  ('frankestrizza@gmail.com', 'frank', 'Frank', 'Salami', 'fkafsldaj!', '127.000.000.006', 'images/users/default.png'),
-  ('ligabuemarcon@gmail.com', 'lmarco', 'Marco', 'Ligabue', 'uefihjkfabj@', '127.000.000.007', 'images/users/default.png'),
-  ('marcusspin@gmail.com', 'marcus', 'Marcus', 'Spin', '0n92njke@', '127.000.000.008', 'images/users/default.png');;
+  ('sarafornaciari@gmail.com', 'sara', 'Sara', 'Fornaciari', 'passwordsicurasara', '127.000.000.001', 'images/users/sara.png'),
+  ('mariorossi@gmail.com', 'MarioRossi', 'Mario', 'Rossi', 'mariomario', '127.000.000.002', 'images/users/MarioRossi.png'),
+  ('lauracastiello@gmail.com', 'lalla', 'Laura', 'Castiello', 'lauraCastiello1207', '127.000.000.003', 'images/users/default.png'),
+  ('jimmy@gmail.com', 'jimmy', 'Jimmy', 'Brown', 'lljimllbrownll', '127.000.000.004', 'images/users/jimmy.png'),
+  ('groot@gmail.com', 'groot', 'Groot', 'Avenger', 'grootaven123', '127.000.000.005', 'images/users/default.png'),
+  ('frankestrizza@gmail.com', 'frank', 'Frank', 'Salami', 'ffrraannkk122346', '127.000.000.006', 'images/users/default.png'),
+  ('ligabuemarcon@gmail.com', 'lmarco', 'Marco', 'Ligabue', 'ligabmarc', '127.000.000.007', 'images/users/default.png'),
+  ('marcusspin@gmail.com', 'marcus', 'Marcus', 'Spin', 'spinmarcusspin', '127.000.000.008', 'images/users/default.png');
 
 INSERT INTO UtentePremium
   (CodUtente, IBAN)
