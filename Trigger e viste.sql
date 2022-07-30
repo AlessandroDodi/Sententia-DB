@@ -17,6 +17,24 @@ WHERE R1.CodR NOT IN (
 	  AND Rimozione.DAnnullamento IS NULL
 );
 
+-- Vista contenente tutte le recensioni disponibili per ciascun utente
+CREATE VIEW RecDisponibiliPerUtente AS
+SELECT Utente.Username, R.CodR
+FROM Utente, RecensioniVisibili AS R, UtentePremium
+WHERE R.DataVisionePubblica <= CURRENT_DATE OR
+(UtentePremium.CodUtente = R.CodUtente AND
+EXISTS (
+	SELECT *
+	FROM Iscrizione, Piano, Esclusivita
+	WHERE Piano.CodUtentePremium = UtentePremium.CodUtente AND
+	Iscrizione.CodUtente = Utente.Username AND
+	Iscrizione.CodP = Piano.CodP AND
+	Iscrizione.DAbbandono IS NULL AND
+	Piano.CodP = Esclusivita.CodP AND
+	Esclusivita.CodR = R.CodR AND
+	DataAnticipata <= CURRENT_DATE
+))
+
 -- Trigger (testare quando ci sono dei dati)
 
 -- ////////////////////////////////////////////////////
