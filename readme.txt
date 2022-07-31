@@ -32,8 +32,9 @@ dbms.
 Istruzioni per installare ed utilizzare il database e i sorgenti jdbc.
 
 Per poter installare il database occorre importare il file 
-complete-db.sql nel proprio DBMS. Per farlo basta copiare il contenuto
-del file nella query tool di pg-admin.
+complete-db.sql nel proprio DBMS. Per farlo basta creare un database
+con nome 'Sententia' e copiare il contenuto del file complete/db.sql
+nella query tool di pg-admin.
 E' necessario che il database abbia il nome 'Sententia', 
 poiché é il nome che é stato utilizzato dal progetto jdbc per
 connettersi al database.
