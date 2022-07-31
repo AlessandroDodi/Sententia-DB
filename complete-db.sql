@@ -288,7 +288,7 @@ BEGIN
 	END IF;
 	
 	IF Cond
-	THEN RAISE EXCEPTION 'Questo codice TRN è già presente nel database.';
+	THEN RAISE EXCEPTION 'Questo codice TRN e'' gia'' presente nel database.';
 	END IF;
 	
 	RETURN NEW;
@@ -325,7 +325,7 @@ BEGIN
 				AND CodMittente = NEW.CodMittente
 	    		AND CodDestinatario = NEW.CodDestinatario)
 	THEN RAISE EXCEPTION 'La tripla ("%", "%", "%") esiste
-						  già in un''altra specializzazione di Messaggio', NEW.CodM,
+						  gia'' in un''altra specializzazione di Messaggio', NEW.CodM,
 						  NEW.CodMittente,
 						  NEW.CodDestinatario;
 	END IF;
@@ -362,8 +362,7 @@ BEGIN
 	IF NOT EXISTS (SELECT *
 				   FROM Recensione
 				   WHERE CodR = NEW.CodR AND CodUtente = CodUtenteP)
-	THEN RAISE EXCEPTION 'La tripla (CodM, CodMittente, CodDestinatario) esiste
-						  già in un''altra specializzazione di Messaggio';
+	THEN RAISE EXCEPTION 'La recensione non appartiene all''utente in questione';
 	END IF;
 	
 	RETURN NEW;
@@ -410,7 +409,7 @@ BEGIN
 	IF EXISTS (SELECT *
 			   FROM Rimozione
 			   WHERE CodR = NEW.CodR AND DAnnullamento IS NULL)
-	THEN RAISE EXCEPTION 'La recensione è già attualmente invisibile';
+	THEN RAISE EXCEPTION 'La recensione e'' gia'' attualmente invisibile';
 	END IF;
 	
 	RETURN NEW;
@@ -433,7 +432,7 @@ BEGIN
 			   WHERE CodP = NEW.CodP AND
 			   CodUtente = NEW.CodUtente AND
 			   DAbbandono IS NULL)
-	THEN RAISE EXCEPTION 'L''utente è già attualmente iscritto al piano';
+	THEN RAISE EXCEPTION 'L''utente e'' gia'' attualmente iscritto al piano';
 	END IF;
 	
 	RETURN NEW;
