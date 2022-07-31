@@ -4,7 +4,7 @@ CREATE TABLE Moderatore(
 	Email varchar(320) UNIQUE,
 	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
-	CHECK(Username NOT LIKE '%[^a-zA-Z0-9]%'),
+	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	Psw char(64) NOT NULL
@@ -14,11 +14,11 @@ CREATE TABLE Utente(
 	Email varchar(320) UNIQUE,
 	CHECK(Email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
 	Username varchar(55) PRIMARY KEY,
-	CHECK(Username NOT LIKE '%[^a-zA-Z0-9]%'),
+	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
-	CHECK(IP LIKE '###.###.###.###'),
+	CHECK(IP ~ '^(\d{3}\.){3}\d{3}$'),
 	Psw char(64) NOT NULL,
 	Foto varchar(55)
 );
