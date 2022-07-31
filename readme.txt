@@ -8,7 +8,7 @@ Gruppo n.28
 
 Sententia.zip
 	Sententia.pdf
-	complete-db.sql
+	sententia-db-completo.sql
 	readme.txt
 	Sententia-jdbc
 		lib
