@@ -443,6 +443,48 @@ CREATE TRIGGER GestioneIscrizione
 BEFORE INSERT OR UPDATE ON Iscrizione
 FOR EACH ROW EXECUTE PROCEDURE VincoloIscrizione();
 
+-- ///////////////////////////////////////////
+
+CREATE FUNCTION VincoloDataEsclusiva() RETURNS TRIGGER AS $$
+BEGIN
+	IF (OLD.DataAnticipata = NEW.DataAnticipata AND
+		OLD.CodR = NEW.CodR) THEN RETURN NEW;
+	END IF;
+	
+	IF EXISTS (SELECT *
+			   FROM Recensione
+			   WHERE DataVisionePubblica IS NOT NULL AND
+			   CodR = NEW.CodR AND NEW.DataAnticipata > DataVisionePubblica)
+	THEN RAISE EXCEPTION 'La data anticipata e'' cronologicamente dopo la data di visione pubblica';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneDataEsclusiva
+BEFORE INSERT OR UPDATE ON Esclusivita
+FOR EACH ROW EXECUTE PROCEDURE VincoloDataEsclusiva();
+
+CREATE FUNCTION VincoloDataVisionePubblica() RETURNS TRIGGER AS $$
+BEGIN
+	IF OLD.DataVisionePubblica = NEW.DataVisionePubblica THEN RETURN NEW;
+	END IF;
+	
+	IF EXISTS (SELECT *
+			   FROM Esclusivita
+			   WHERE CodR = NEW.CodR AND NEW.DataVisionePubblica < DataAnticipata)
+	THEN RAISE EXCEPTION 'La data di visione pubblica immessa precede una data di visione anticipata';
+	END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneDataVisionePubblica
+BEFORE INSERT OR UPDATE ON Recensione
+FOR EACH ROW EXECUTE PROCEDURE VincoloDataVisionePubblica();
+
 -- //////////////////////////////////////////////////////
 
 -- Security and user permissions
