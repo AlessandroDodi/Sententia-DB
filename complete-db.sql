@@ -501,7 +501,7 @@ GRANT SELECT(email, username, nome, cognome, ip, foto, psw),
       UPDATE(email, nome, cognome, ip, foto) ON utente to client;
 
 
-CREATE FUNCTION delete_user(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN SECURITY DEFINER AS $$
+CREATE FUNCTION delete_user(IN usr VARCHAR(55), IN pswd VARCHAR(72)) RETURNS BOOLEAN SECURITY DEFINER AS $$
         BEGIN
             IF NOT (SELECT user_login(usr, pswd)) = TRUE 
             THEN
@@ -513,7 +513,7 @@ CREATE FUNCTION delete_user(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOO
         END           
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION change_psw(IN usr VARCHAR(55), IN new_pswd VARCHAR(64), IN old_pswd VARCHAR(64)) 
+CREATE FUNCTION change_psw(IN usr VARCHAR(55), IN new_pswd VARCHAR(72), IN old_pswd VARCHAR(72)) 
     RETURNS BOOLEAN SECURITY DEFINER AS $$
         BEGIN
             IF NOT (SELECT user_login(usr, old_pswd)) = TRUE 
@@ -526,7 +526,7 @@ CREATE FUNCTION change_psw(IN usr VARCHAR(55), IN new_pswd VARCHAR(64), IN old_p
         END           
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION moderatore_login(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
+CREATE FUNCTION moderatore_login(IN usr VARCHAR(55), IN pswd VARCHAR(72)) RETURNS BOOLEAN AS $$
     DECLARE
         successful BOOLEAN;
     BEGIN
@@ -540,7 +540,7 @@ CREATE FUNCTION moderatore_login(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURN
     END;
 $$ LANGUAGE 'plpgsql';
 
-CREATE FUNCTION user_login(IN usr VARCHAR(55), IN pswd VARCHAR(64)) RETURNS BOOLEAN AS $$
+CREATE FUNCTION user_login(IN usr VARCHAR(55), IN pswd VARCHAR(72)) RETURNS BOOLEAN AS $$
     DECLARE
         successful BOOLEAN;
     BEGIN
