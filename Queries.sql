@@ -213,7 +213,7 @@ WHERE CodM = '6' AND CodMittente = 'sara'
 
 -- modifica della data di visione di modifica di tutte le recensioni scritte da sara
 UPDATE Recensione
-SET DataVisionePubblica = '2022-06-30'
+SET DataVisionePubblica = '2022-06-30 10:10:10'
 WHERE CodUtente = 'sara'
 
 -- modifica IBAN dell'utente premium groot

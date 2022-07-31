@@ -279,6 +279,7 @@ public class MainClass {
 					};
 					
 					if (stmt != null && option != 13) {
+						System.out.println("\n");
 						OutputFormatter.printResultSet(stmt.executeQuery());
 						stmt.close();
 					}
