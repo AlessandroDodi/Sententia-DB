@@ -7,7 +7,7 @@ CREATE TABLE Moderatore(
 	CHECK(Username !~* '.*[^A-Za-z0-9].*'),
 	Nome varchar(55) NOT NULL,
 	Cognome varchar(55) NOT NULL,
-	Psw char(64) NOT NULL
+	Psw varchar(72) NOT NULL
 );
 
 CREATE TABLE Utente(
@@ -19,7 +19,7 @@ CREATE TABLE Utente(
 	Cognome varchar(55) NOT NULL,
 	IP char(15) NOT NULL,
 	CHECK(IP ~ '^(\d{3}\.){3}\d{3}$'),
-	Psw char(64) NOT NULL,
+	Psw varchar(72) NOT NULL,
 	Foto varchar(55)
 );
 
@@ -110,7 +110,7 @@ CREATE TABLE MTesto(
 	CodM int,
 	CodMittente varchar(55),
 	CodDestinatario varchar(55),
-	Contenuto varchar(1555),
+	Contenuto varchar(1555) NOT NULL,
 	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario),
 	PRIMARY KEY (CodM, CodMittente, CodDestinatario)
 );
@@ -119,7 +119,7 @@ CREATE TABLE MImmagine(
 	CodM int,
 	CodMittente varchar(55),
 	CodDestinatario varchar(55),
-	Immagine varchar(55),
+	Immagine varchar(55) NOT NULL,
 	Descrizione varchar(1555),
 	FOREIGN KEY (CodM, CodMittente, CodDestinatario) REFERENCES Messaggio(CodM, CodMittente, CodDestinatario),
 	PRIMARY KEY (CodM, CodMittente, CodDestinatario)
@@ -536,23 +536,23 @@ FOR EACH ROW EXECUTE PROCEDURE GestionePassword();
 INSERT INTO Moderatore
   (Email, Username, Nome, Cognome, Psw)
 VALUES 
-  ('dodialessandro3@gmail.com', 'AlleDodi', 'Alessandro', 'Dodi', 'H^EHv,)rZ2&cHS9M'),
-  ('amanjotSingh@gmail.com', 'jot', 'Amanjot', 'Singh', 'ni28sk!ks8'),
-  ('LeonardoTemperanza@gmail.com', 'lollo', 'Leonardo', 'Temperanza', 'ojabsld328!k'),
-  ('luigifini@gmail.com', 'luigi', 'Luigi', 'Fini', '12n988^w2'),
-  ('mariacostanzi@gmail.com', 'meri', 'Maria', 'Costanzi', 'jnkacshbi728òç@');
+  ('dodialessandro3@gmail.com', 'AlleDodi', 'Alessandro', 'Dodi', 'alleella314253'),
+  ('amanjotSingh@gmail.com', 'jot', 'Amanjot', 'Singh', 'singh392015'),
+  ('LeonardoTemperanza@gmail.com', 'lollo', 'Leonardo', 'Temperanza', 'leotemp126'),
+  ('luigifini@gmail.com', 'luigi', 'Luigi', 'Fini', 'luigiluigi'),
+  ('mariacostanzi@gmail.com', 'meri', 'Maria', 'Costanzi', 'MariaCostanzi24152');
 
 INSERT INTO Utente
   (Email, Username, Nome, Cognome, Psw, IP, Foto)
 VALUES 
-  ('sarafornaciari@gmail.com', 'sara', 'Sara', 'Fornaciari', 'aisdouh78biknjpP', '127.000.000.001', 'images/users/sara.png'),
-  ('mariorossi@gmail.com', 'MarioRossi', 'Mario', 'Rossi', '2318sk!oj%%3', '127.000.000.002', 'images/users/MarioRossi.png'),
-  ('lauracastiello@gmail.com', 'lalla', 'Laura', 'Castiello', 'ojabsld328!k', '127.000.000.003', 'images/users/default.png'),
-  ('jimmy@gmail.com', 'jimmy', 'Jimmy', 'Brown', '3vfds2', '127.000.000.004', 'images/users/jimmy.png'),
-  ('groot@gmail.com', 'groot', 'Groot', 'Avenger', 'dksajdlsa?', '127.000.000.005', 'images/users/default.png'),
-  ('frankestrizza@gmail.com', 'frank', 'Frank', 'Salami', 'fkafsldaj!', '127.000.000.006', 'images/users/default.png'),
-  ('ligabuemarcon@gmail.com', 'lmarco', 'Marco', 'Ligabue', 'uefihjkfabj@', '127.000.000.007', 'images/users/default.png'),
-  ('marcusspin@gmail.com', 'marcus', 'Marcus', 'Spin', '0n92njke@', '127.000.000.008', 'images/users/default.png');;
+  ('sarafornaciari@gmail.com', 'sara', 'Sara', 'Fornaciari', 'passwordsicurasara', '127.000.000.001', 'images/users/sara.png'),
+  ('mariorossi@gmail.com', 'MarioRossi', 'Mario', 'Rossi', 'mariomario', '127.000.000.002', 'images/users/MarioRossi.png'),
+  ('lauracastiello@gmail.com', 'lalla', 'Laura', 'Castiello', 'lauraCastiello1207', '127.000.000.003', 'images/users/default.png'),
+  ('jimmy@gmail.com', 'jimmy', 'Jimmy', 'Brown', 'lljimllbrownll', '127.000.000.004', 'images/users/jimmy.png'),
+  ('groot@gmail.com', 'groot', 'Groot', 'Avenger', 'grootaven123', '127.000.000.005', 'images/users/default.png'),
+  ('frankestrizza@gmail.com', 'frank', 'Frank', 'Salami', 'ffrraannkk122346', '127.000.000.006', 'images/users/default.png'),
+  ('ligabuemarcon@gmail.com', 'lmarco', 'Marco', 'Ligabue', 'ligabmarc', '127.000.000.007', 'images/users/default.png'),
+  ('marcusspin@gmail.com', 'marcus', 'Marcus', 'Spin', 'spinmarcusspin', '127.000.000.008', 'images/users/default.png');
 
 INSERT INTO UtentePremium
   (CodUtente, IBAN)
