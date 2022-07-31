@@ -63,7 +63,7 @@ WHERE (Messaggio.CodMittente = 'sara'
 	AND Messaggio.CodDestinatario = 'jimmy')
 	OR(Messaggio.CodMittente = 'jimmy'
 		AND Messaggio.CodDestinatario = 'sara')
-ORDER BY DESC Messaggio.data
+ORDER BY Messaggio.data DESC
 
 
 -- Vedere tutti gli utenti della chat di Sara
