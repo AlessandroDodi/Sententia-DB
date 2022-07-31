@@ -7,7 +7,7 @@ Gruppo n.28
 -----------------------------------------------------------------------
 
 Sententia.zip
-	Progetto database.docx
+	Sententia.pdf
 	complete-db.sql
 	readme.txt
 	Sententia-jdbc
