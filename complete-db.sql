@@ -247,7 +247,7 @@ WHERE R1.CodR NOT IN (
 -- Vista contenente tutte le recensioni disponibili per ciascun utente
 CREATE VIEW RecDisponibiliPerUtente AS
 SELECT Utente.Username, R.CodR
-FROM Utente, RecensioniVisibili AS R, UtentePremium
+FROM Utente, RecensioniVisibili AS R
 WHERE R.DataVisionePubblica <= CURRENT_DATE OR
 EXISTS (
 	SELECT *
