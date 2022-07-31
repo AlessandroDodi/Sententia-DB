@@ -143,7 +143,7 @@ WHERE RecDisponibiliPerUtente.Username = '?'
 
 	-- ELENCARE tutte le transazioni effettuate da un utente
 
-		SELECT TRN, Annullata Data, NumeroCartaDiCredito, Piano.Quantita
+		SELECT TRN, Annullata, Data, NumeroCartaDiCredito, Piano.Quantita
 		FROM TransazioneAutomatica, Piano
 		WHERE TransazioneAutomatica.CodPiano = Piano.CodP AND 
 			TransazioneAutomatica.CodMittente = ?
