@@ -195,6 +195,32 @@ WHERE NOT EXISTS (
 		RDPU.CodR = R2.CodR
 ));
 
+-- rimozione del like dato dall'utente lalla alla recensione 1
+DELETE FROM Medaglia WHERE CodUtente = 'lalla' and CodR = '1'
+
+--rimozione del commento 1 della recensione 4
+DELETE FROM Commento WHERE CodC = '1' and CodR = '4'
+
+--rimozione del follow a frank da parte di jimmy
+DELETE FROM Amicizia WHERE Seguente = 'jimmy' and Seguito = 'frank'
+
+
+-- modifica del messaggio 6 inviato da sara a jimmy
+UPDATE MTesto
+SET Contenuto = 'Usciamo sabato?'
+WHERE CodM = '6' AND CodMittente = 'sara'
+    AND CodDestinatario = 'jimmy';
+
+-- modifica della data di visione di modifica di tutte le recensioni scritte da sara
+UPDATE Recensione
+SET DataVisionePubblica = '2022-06-30'
+WHERE CodUtente = 'sara'
+
+-- modifica IBAN dell'utente premium groot
+UPDATE UtentePremium
+SET IBAN = 'IT60X0542811101000093108800'
+WHERE CodUtente = 'groot'
+
 --------------------------------------
 -- -- Vedere tutte le recensioni che ha scritto Sara
 
