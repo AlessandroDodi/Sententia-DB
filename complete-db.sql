@@ -487,6 +487,41 @@ FOR EACH ROW EXECUTE PROCEDURE VincoloDataVisionePubblica();
 
 -- //////////////////////////////////////////////////////
 
+-- Si può utilizzare la stessa procedura per entrambi i trigger, in quanto hanno l'attributo CodUtente con il medesimo nome 
+
+CREATE FUNCTION VincoloMaxPubblicazioni() RETURNS TRIGGER AS $$
+DECLARE
+    -- Contiene l'ora attuale priva di minuti e secondi
+    OraNonMin timestamp;
+BEGIN
+    OraNonMin = date_trunc('hour', Now()::timestamp);
+
+    IF (SELECT (SELECT COUNT(*)
+               FROM Recensione
+               WHERE CodUtente = NEW.CodUtente AND
+               DataPubblicazione >= OraNonMin)
+               +
+               (SELECT COUNT(*)
+                FROM Commento
+                WHERE CodUtente = NEW.CodUtente AND
+                Commento.Data >= OraNonMin)) > 1000
+    THEN RAISE EXCEPTION 'E'' stato superato il numero massimo di pubblicazioni che si possono effettuare in un''ora.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER GestioneMaxPubblicazioniRec
+BEFORE INSERT ON Recensione
+FOR EACH ROW EXECUTE PROCEDURE VincoloMaxPubblicazioni();
+
+CREATE TRIGGER GestioneMaxPubblicazioniCom
+BEFORE INSERT ON Commento
+FOR EACH ROW EXECUTE PROCEDURE VincoloMaxPubblicazioni();
+
+-- //////////////////////////////////////////////////////
+
 -- Security and user permissions
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
