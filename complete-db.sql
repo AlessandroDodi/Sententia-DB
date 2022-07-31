@@ -249,6 +249,7 @@ CREATE VIEW RecDisponibiliPerUtente AS
 SELECT Utente.Username, R.CodR
 FROM Utente, RecensioniVisibili AS R
 WHERE R.DataVisionePubblica <= CURRENT_DATE OR
+Utente.Username = R.CodUtente OR 
 EXISTS (
 	SELECT *
 	FROM UtentePremium, Iscrizione, Piano, Esclusivita
