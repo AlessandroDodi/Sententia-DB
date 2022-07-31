@@ -178,7 +178,22 @@ WHERE RecDisponibiliPerUtente.Username = '?'
 			FROM Utente
 		)
 
+--Elencare tutti gli utenti che possono visualizzare tutte le recensioni della categoria "Film" pubblicate dall'utente con username "lalla"
 
+SELECT U1.*
+FROM Utente AS U1
+WHERE NOT EXISTS (
+	SELECT *
+	FROM Recensione AS R2, Oggetto AS O2
+	WHERE R2.CodUtente = 'lalla' AND
+	R2.CodO = O2.CodO AND
+	O2.Categoria = 'Film' AND
+	NOT EXISTS (
+		SELECT *
+		FROM RecDisponibiliPerUtente AS RDPU
+		WHERE RDPU.Username = U1.Username AND
+		RDPU.CodR = R2.CodR
+));
 
 --------------------------------------
 -- -- Vedere tutte le recensioni che ha scritto Sara
